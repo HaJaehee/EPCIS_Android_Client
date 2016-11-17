@@ -158,18 +158,15 @@ public class EPCISQueryClient extends EPCISClient{
 	@Override
 	protected void onPostExecute(Void aVoid) {
 		super.onPostExecute(aVoid);
-		Log.e("onPostExecute:","wtf1");
 		m_tvEvent.append(m_strResult);
-		Log.e("onPostExecute:","wtf2");
 
 		XPathFactory xpathfactory = XPathFactory.newInstance();
 		XPath xpath = xpathfactory.newXPath();
 		InputSource source = new InputSource(new StringReader(m_strResult));
 		String power = null;
-		Log.e("onPostExecute:","wtf3");
 		try {
 			power = xpath.evaluate("/EPCISQueryDocumentType/EPCISBody/*[local-name()='QueryResults']/resultsBody/EventList/ObjectEvent/*[local-name()='rampPower']", source);
-			Log.e("rampPower:","wtf4"+power);
+			Log.e("rampPower:",power);
 			if (power.equals("ON")) {
 				m_fl.turnOnFlashLight();
 			}

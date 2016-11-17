@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.e("WTF is that:","wtf");
         m_etEPCISName = (EditText) findViewById(R.id.etEPCISName);
         m_etEPCISName.setText(EPCISConfiguration.EPCISname);
         m_etClientToken = (EditText) findViewById(R.id.etClientToken);
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnQuery:
                 setEPCISConfigruation();
-                Log.e("WTF is that:","wtf");
                 m_eh.query(m_strQuery, m_fl);
                 break;
         }
