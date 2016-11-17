@@ -19,11 +19,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText m_etUserName;
     private EditText m_etClientToken;
     private EditText m_etEPCISName;
+    private EditText m_etQuery;
     private TextView m_tvEvent;
     private ToggleButton m_tbRampPower;
     private Button m_btnCapture;
     private Button m_btnQuery;
     private String m_strRampPower = "OFF";
+    private String m_strQuery = "eventCountLimit=1&orderBy=recordTime";
     private EPCISEventHandler m_eh;
 
     @Override
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         m_etUserName = (EditText) findViewById(R.id.etUserName);
         m_etUserName.setText(EPCISConfiguration.Username);
         m_tvEvent = (TextView) findViewById(R.id.tvEvent);
+        m_etQuery = (EditText) findViewById(R.id.etQuery);
+        m_etQuery.setText(m_strQuery);
         m_tbRampPower = (ToggleButton) findViewById(R.id.tbRampPower);
         m_tbRampPower.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnQuery:
                 setEPCISConfigruation();
-                m_eh.query();
+                m_eh.query(m_strQuery);
                 break;
         }
     }

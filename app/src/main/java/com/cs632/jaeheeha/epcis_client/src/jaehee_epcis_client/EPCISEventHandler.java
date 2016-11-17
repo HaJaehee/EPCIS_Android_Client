@@ -22,15 +22,14 @@ public class EPCISEventHandler {
 		setEventTextView(a_tv);
 	}
 
-	public void query() {
+	public void query(String a_strQuery) {
 
 		//EPCIS Query Client Example
 		EPCISQueryClient queryClient = new EPCISQueryClient();
 		//= new EPCISQueryClient(EPCISConfiguration.EPCIS_AC_Server_URL,EPCISConfiguration.EPCISname,EPCISConfiguration.Username,EPCISConfiguration.EPCIS_Clienttoken);
 
-		String query = "eventCountLimit=1&orderBy=recordTime";
 		queryClient.setEventTextView(m_tv);
-		queryClient.setQuery(query);
+		queryClient.setQuery(a_strQuery);
 		queryClient.doQuery();
 
 	}
