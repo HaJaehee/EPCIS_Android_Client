@@ -1,7 +1,14 @@
 package com.cs632.jaeheeha.epcis_client;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Camera;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -11,8 +18,8 @@ import android.widget.ToggleButton;
 
 import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.EPCISEventHandler;
 import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.configuration.EPCISConfiguration;
+import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.util.FlashLightUtilForL;
 
-import java.util.EventListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -27,12 +34,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String m_strRampPower = "OFF";
     private String m_strQuery = "eventCountLimit=1&orderBy=recordTime";
     private EPCISEventHandler m_eh;
+    private FlashLightUtilForL m_fl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.e("WTF is that:","wtf");
         m_etEPCISName = (EditText) findViewById(R.id.etEPCISName);
         m_etEPCISName.setText(EPCISConfiguration.EPCISname);
         m_etClientToken = (EditText) findViewById(R.id.etClientToken);
@@ -56,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         m_btnCapture.setOnClickListener(this);
         m_btnQuery = (Button) findViewById(R.id.btnQuery);
         m_btnQuery.setOnClickListener(this);
+        setCamera();
 
         m_eh = new EPCISEventHandler(m_tvEvent);
     }
@@ -70,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnQuery:
                 setEPCISConfigruation();
-                m_eh.query(m_strQuery);
+                Log.e("WTF is that:","wtf");
+                m_eh.query(m_strQuery, m_fl);
                 break;
         }
     }
@@ -80,5 +91,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EPCISConfiguration.EPCIS_Clienttoken=m_etClientToken.getText().toString();
         EPCISConfiguration.EPCISname=m_etEPCISName.getText().toString();
         EPCISConfiguration.Username=m_etUserName.getText().toString();
+    }
+
+    public void setCamera() {
+        if (checkSelfPermission(android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                    123456);
+        }else {
+            m_fl = new FlashLightUtilForL(getApplicationContext());
+        }
+    }
+
+
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 123456) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                m_fl = new FlashLightUtilForL(getApplicationContext());
+                if (m_fl == null)
+                    Log.e("camera:","null");
+
+                Log.e("camera:","not null");
+            }
+            else {
+                // Your app will not have this permission. Turn off all functions
+                // that require this permission or it will force close like your
+                // original question
+            }
+        }
     }
 }

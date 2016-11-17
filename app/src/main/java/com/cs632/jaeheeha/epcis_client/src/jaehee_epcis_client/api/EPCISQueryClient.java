@@ -1,18 +1,36 @@
 package com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.api;
 
+import android.content.Context;
+import android.graphics.Camera;
+import android.hardware.camera2.CameraManager;
 import android.os.AsyncTask;
+import android.provider.DocumentsContract;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.configuration.EPCISConfiguration;
+import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.util.FlashLightUtilForL;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 /**
 * The EPCIS Client API is the program for Java programmed devices using EPCIS.
@@ -35,6 +53,8 @@ public class EPCISQueryClient extends EPCISClient{
 	private String m_strResult;
 	private String m_strCookie;
 	private TextView m_tvEvent;
+	private FlashLightUtilForL m_fl;
+
 
 	public EPCISQueryClient (){
 		m_EPCIS_AC_Server_URL = EPCISConfiguration.EPCIS_AC_Server_URL;
@@ -94,6 +114,8 @@ public class EPCISQueryClient extends EPCISClient{
 		this.m_tvEvent = a_tv;
 	}
 
+	public void setCamera (FlashLightUtilForL a_fl) { m_fl = a_fl; }
+
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
@@ -136,6 +158,29 @@ public class EPCISQueryClient extends EPCISClient{
 	@Override
 	protected void onPostExecute(Void aVoid) {
 		super.onPostExecute(aVoid);
+		Log.e("onPostExecute:","wtf1");
 		m_tvEvent.append(m_strResult);
+		Log.e("onPostExecute:","wtf2");
+
+		XPathFactory xpathfactory = XPathFactory.newInstance();
+		XPath xpath = xpathfactory.newXPath();
+		InputSource source = new InputSource(new StringReader(m_strResult));
+		String power = null;
+		Log.e("onPostExecute:","wtf3");
+		try {
+			power = xpath.evaluate("/EPCISQueryDocumentType/EPCISBody/*[local-name()='QueryResults']/resultsBody/EventList/ObjectEvent/*[local-name()='rampPower']", source);
+			Log.e("rampPower:","wtf4"+power);
+			if (power.equals("ON")) {
+				m_fl.turnOnFlashLight();
+			}
+			else if (power.equals("OFF")) {
+				m_fl.turnOffFlashLight();
+			}
+
+
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
 	}
+
 }

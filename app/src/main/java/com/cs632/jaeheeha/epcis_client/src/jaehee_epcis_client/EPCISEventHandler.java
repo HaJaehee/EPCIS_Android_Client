@@ -1,9 +1,12 @@
 package com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client;
 
+import android.content.Context;
+import android.graphics.Camera;
 import android.widget.TextView;
 
 import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.api.EPCISCaptureClient;
 import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.api.EPCISQueryClient;
+import com.cs632.jaeheeha.epcis_client.src.jaehee_epcis_client.util.FlashLightUtilForL;
 
 /**
 * The EPCIS Client API is the program for Java programmed devices using EPCIS.
@@ -22,13 +25,14 @@ public class EPCISEventHandler {
 		setEventTextView(a_tv);
 	}
 
-	public void query(String a_strQuery) {
+	public void query(String a_strQuery, FlashLightUtilForL a_fl) {
 
 		//EPCIS Query Client Example
 		EPCISQueryClient queryClient = new EPCISQueryClient();
 		//= new EPCISQueryClient(EPCISConfiguration.EPCIS_AC_Server_URL,EPCISConfiguration.EPCISname,EPCISConfiguration.Username,EPCISConfiguration.EPCIS_Clienttoken);
 
 		queryClient.setEventTextView(m_tv);
+		queryClient.setCamera(a_fl);
 		queryClient.setQuery(a_strQuery);
 		queryClient.doQuery();
 
