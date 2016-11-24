@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         m_btnQuery.setOnClickListener(this);
         setCamera();
 
+
         m_eh = new EPCISEventHandler(m_tvEvent);
     }
 
@@ -99,20 +100,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     123456);
         }else {
             m_fl = new FlashLightUtilForL(getApplicationContext());
-            m_fl.turnOffFlashLight();
+
         }
     }
-
 
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 123456) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 m_fl = new FlashLightUtilForL(getApplicationContext());
-                m_fl.turnOffFlashLight();
-                if (m_fl == null)
-                    Log.e("camera:","null");
 
-                Log.e("camera:","not null");
             }
             else {
                 // Your app will not have this permission. Turn off all functions

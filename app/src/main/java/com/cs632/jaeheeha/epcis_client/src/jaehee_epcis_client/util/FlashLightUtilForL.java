@@ -60,7 +60,7 @@ public class FlashLightUtilForL {
                 mBuilder = camera.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
                 //flash on, default is on
                 mBuilder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AF_MODE_AUTO);
-                mBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_TORCH);
+                mBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_OFF);
                 List<Surface> list = new ArrayList<Surface>();
                 mSurfaceTexture = new SurfaceTexture(1);
                 Size size = getSmallestSize(mCameraDevice.getId());
@@ -141,6 +141,7 @@ public class FlashLightUtilForL {
         }
     }
 
+
     private void close() {
         if (mCameraDevice == null || mSession == null) {
             return;
@@ -149,5 +150,6 @@ public class FlashLightUtilForL {
         mCameraDevice.close();
         mCameraDevice = null;
         mSession = null;
+        mCameraManager = null;
     }
 }
