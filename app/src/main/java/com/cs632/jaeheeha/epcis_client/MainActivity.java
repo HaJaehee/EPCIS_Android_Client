@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     123456);
         }else {
             m_fl = new FlashLightUtilForL(getApplicationContext());
+            m_fl.turnOffFlashLight();
         }
     }
 
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == 123456) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 m_fl = new FlashLightUtilForL(getApplicationContext());
+                m_fl.turnOffFlashLight();
                 if (m_fl == null)
                     Log.e("camera:","null");
 
